@@ -6,3 +6,13 @@ edition = "2021"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
+embedded-hal = "0.2.7"
+
+[dev-dependencies]
+cortex-m = "0.7.7"
+teensy4-panic = "0.2.3"
+teensy4-bsp = { version = "0.4.6", features = ["rt", "usb-logging"] }
+log = "0.4.20"
+
+[[example]]
+name = "teensy41"
