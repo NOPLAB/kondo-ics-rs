@@ -13,7 +13,7 @@ use bsp::{
     hal::{lpuart::ReadFlags, timer::Blocking},
 };
 
-use kondo_ics::commnd_generator::CommandGenerator;
+use kondo_ics::commnd_generator::{CommandGenerator, Position};
 
 #[bsp::rt::entry]
 fn main() -> ! {
@@ -39,13 +39,16 @@ fn main() -> ! {
     delay.block_ms(1000);
 
     loop {
-        let cmd = CommandGenerator::set_position(0, 7500).unwrap();
+        // let cmd = CommandGenerator::unsafe_set_position(0, 7500);
+        let cmd = CommandGenerator::set_position(0, Position::new_num(7500).unwrap()).unwrap();
         send_servo(&mut delay, &mut lpuart6, &mut enable_pin, &cmd, 3);
         delay.block_ms(3000);
-        let cmd = CommandGenerator::set_position(0, 5500).unwrap();
+        // let cmd = CommandGenerator::unsafe_set_position(0, 5500);
+        let cmd = CommandGenerator::set_position(0, Position::new_num(5500).unwrap()).unwrap();
         send_servo(&mut delay, &mut lpuart6, &mut enable_pin, &cmd, 3);
         delay.block_ms(3000);
-        let cmd = CommandGenerator::set_position(0, 9500).unwrap();
+        // let cmd = CommandGenerator::unsafe_set_position(0, 9500);
+        let cmd = CommandGenerator::set_position(0, Position::new_num(9500).unwrap()).unwrap();
         send_servo(&mut delay, &mut lpuart6, &mut enable_pin, &cmd, 3);
         delay.block_ms(3000);
     }
