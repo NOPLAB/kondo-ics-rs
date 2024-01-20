@@ -8,7 +8,7 @@ use teensy4_panic as _;
 
 use bsp::{board, hal::timer::Blocking};
 
-use kondo_ics::commnd_generator::{CommandGenerator, Position};
+use kondo_ics::command_generator::{CommandGenerator, Position};
 
 #[bsp::rt::entry]
 fn main() -> ! {
