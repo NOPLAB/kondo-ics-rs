@@ -1,3 +1,3 @@
 #![no_std]
 
-pub mod commnd_generator;
+pub mod command_generator;

@@ -16,7 +16,8 @@ pub enum SC {
     Speed = 0x02,
     Current = 0x03,
     Temp = 0x04,
-    Position = 0x05, // only for isc3.6
+    /// only for isc3.6
+    Position = 0x05,
 }
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
@@ -65,8 +66,6 @@ impl CommandGenerator {
         ]
     }
 
-    /// not tested
-    ///
     /// id: 0 ~ 31
     ///
     /// pos: read from [Position] struct
