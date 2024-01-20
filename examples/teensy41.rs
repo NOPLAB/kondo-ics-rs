@@ -1,17 +1,12 @@
 #![no_std]
 #![no_main]
 
-use core::convert::Infallible;
-
 use embedded_hal::{blocking::serial::Write, serial::Read};
 
 use teensy4_bsp as bsp;
 use teensy4_panic as _;
 
-use bsp::{
-    board,
-    hal::{lpuart::ReadFlags, timer::Blocking},
-};
+use bsp::{board, hal::timer::Blocking};
 
 use kondo_ics::commnd_generator::{CommandGenerator, Position};
 
@@ -54,25 +49,29 @@ fn main() -> ! {
     }
 }
 
-fn send_servo<T, D, P, E>(
+fn send_servo<D, U, const N: u8, P, E>(
     delay: &mut D,
-    uart: &mut T,
+    uart: &mut bsp::hal::lpuart::Lpuart<U, N>,
     enable_pin: &mut P,
     cmd: &[u8],
     read_size: u8,
 ) where
-    T: Write<u8, Error = Infallible> + Read<u8, Error = ReadFlags>,
     D: embedded_hal::blocking::delay::DelayUs<u32>,
     P: embedded_hal::digital::v2::OutputPin<Error = E>,
     E: core::fmt::Debug,
 {
     enable_pin.set_high().unwrap();
 
-    delay.delay_us(1000);
+    // 13usで動作 余裕を持って20us
+    delay.delay_us(20);
 
     uart.bwrite_all(&cmd).unwrap();
 
-    delay.delay_us(1000);
+    while !uart.status().contains(
+        bsp::hal::lpuart::Status::TRANSMIT_EMPTY | bsp::hal::lpuart::Status::TRANSMIT_COMPLETE,
+    ) {
+        delay.delay_us(100);
+    }
 
     enable_pin.set_low().unwrap();
 
